@@ -1,0 +1,108 @@
+// This is your Prisma schema file
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Business {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  phone       String?
+  address     String?
+  description String?
+  logoUrl     String?  @map("logo_url")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  users       User[]
+  categories  Category[]
+  menuItems   MenuItem[]
+  invoices    Invoice[]
+
+  @@map("businesses")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  businessId   String   @map("business_id")
+  name         String
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  role         String   @default("owner")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@map("users")
+}
+
+model Category {
+  id         String   @id @default(uuid())
+  businessId String   @map("business_id")
+  name       String
+  sortOrder  Int      @default(0) @map("sort_order")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  business  Business   @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  menuItems MenuItem[]
+
+  @@map("categories")
+}
+
+enum MenuItemStatus {
+  ACTIVE
+  OUT_OF_STOCK
+  ARCHIVED
+}
+
+model MenuItem {
+  id          String         @id @default(uuid())
+  businessId  String         @map("business_id")
+  categoryId  String         @map("category_id")
+  name        String
+  description String?
+  price       Decimal        @db.Decimal(10, 2)
+  imageUrl    String?        @map("image_url")
+  status      MenuItemStatus @default(ACTIVE)
+  sortOrder   Int            @default(0) @map("sort_order")
+  createdAt   DateTime       @default(now()) @map("created_at")
+
+  business     Business      @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  category     Category      @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  invoiceItems InvoiceItem[]
+
+  @@map("menu_items")
+}
+
+model Invoice {
+  id            String   @id @default(uuid())
+  businessId    String   @map("business_id")
+  invoiceNumber String   @map("invoice_number")
+  totalAmount   Decimal  @db.Decimal(10, 2) @map("total_amount")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  business Business     @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  items    InvoiceItem[]
+
+  @@unique([businessId, invoiceNumber])
+  @@map("invoices")
+}
+
+model InvoiceItem {
+  id         String  @id @default(uuid())
+  invoiceId  String  @map("invoice_id")
+  menuItemId String  @map("menu_item_id")
+  quantity   Int
+  unitPrice  Decimal @db.Decimal(10, 2) @map("unit_price")
+  lineTotal  Decimal @db.Decimal(10, 2) @map("line_total")
+
+  invoice  Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  menuItem MenuItem @relation(fields: [menuItemId], references: [id], onDelete: Restrict)
+
+  @@map("invoice_items")
+}
