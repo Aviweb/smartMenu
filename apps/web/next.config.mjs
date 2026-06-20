@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  transpilePackages: ["@smartmenu/db"],
   images: {
     remotePatterns: [
       {

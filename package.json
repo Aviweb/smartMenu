@@ -7,7 +7,7 @@
     "packages/*"
   ],
   "scripts": {
-    "postinstall": "prisma generate --schema=packages/db/prisma/schema.prisma",
+    "postinstall": "node -e \"require('fs').existsSync('node_modules/.bin/prisma') && require('child_process').execSync('prisma generate --schema=packages/db/prisma/schema.prisma', {stdio:'inherit'})\"",
     "dev": "npm run dev --workspace=apps/web",
     "build": "npm run build --workspace=apps/web",
     "db:generate": "npm run db:generate --workspace=packages/db",
@@ -15,14 +15,15 @@
     "db:push": "npm run db:push --workspace=packages/db",
     "db:seed": "npm run db:seed --workspace=packages/db"
   },
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
   "devDependencies": {
-    "babel-plugin-module-resolver": "^5.0.3",
-    "babel-preset-expo": "~54.0.0",
-    "expo": "~54.0.0",
-    "turbo": "^2.0.0",
-    "typescript": "~6.0.3"
+    "turbo": "^2.0.0"
   },
   "overrides": {
-    "babel-preset-expo": "~54.0.0"
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
   }
 }

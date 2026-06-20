@@ -16,7 +16,7 @@ packages/db/node_modules/
 
 # Expo / React Native
 apps/mobile/.expo/
-apps/mobile/android/
+apps/mobile/android/https://expo.dev/login?client_id=eas-cli&redirect_uri=http://localhost:42393/auth/callback&response_type=code&code_challenge=sWqrGFO5dx3aog86RegTlF86yvAjEa3DAEIMJicsX_4&code_challenge_method=S256&state=ZCn2tZejrc57Y0i0lH_XTym7h45O5NXOL9UYCJaLCNw&confirm_account=true
 apps/mobile/ios/
 
 # Logs

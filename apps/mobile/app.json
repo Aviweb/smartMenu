@@ -11,7 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#f97316"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.smartmenu.lite"
@@ -21,7 +23,10 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#f97316"
       },
-      "package": "com.smartmenu.lite"
+      "package": "com.smartmenu.lite",
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "plugins": [
       "expo-router",
@@ -36,6 +41,12 @@
     "experiments": {
       "typedRoutes": true
     },
-    "scheme": "smartmenu"
+    "scheme": "smartmenu",
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "899a40e4-2540-4469-81f8-8bad985cee9c"
+      }
+    }
   }
 }
